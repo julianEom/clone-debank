@@ -11,15 +11,20 @@ import {
   Transaction,
   TransactionStreaming,
 } from '../../interface/Transaction.type';
-import { Alchemy, Network, AlchemySubscription } from 'alchemy-sdk';
+import {
+  Alchemy,
+  Network,
+  AlchemySubscription,
+  AlchemySettings,
+} from 'alchemy-sdk';
 
 type TransactionStreamingList = ITransaction[] | [];
 const Page = () => {
-  // const network = 'mainnet';
-  // const address = '0x7e0de483a33bd04d2efe38686be5cb25cfd3e533'; //Dan 지갑
+  const network = 'mainnet';
+  const address = '0x7e0de483a33bd04d2efe38686be5cb25cfd3e533'; //Dan 지갑
 
-  const network = 'goerli';
-  const address = '0xca6308326a0d3e4b4f2aa462aab979a451a49fba'; //내 지갑
+  // const network = 'goerli';
+  // const address = '0xca6308326a0d3e4b4f2aa462aab979a451a49fba'; //내 지갑
 
   const [streamingTransaction, setStreamingTransaction] = useState<
     ITransaction[]
@@ -43,10 +48,11 @@ const Page = () => {
       suspense: true,
     }
   );
-
-  const settings = {
+  const alchemyNetwork =
+    network == 'mainnet' ? Network.ETH_MAINNET : Network.ETH_GOERLI; // Replace with your network
+  const settings: AlchemySettings = {
     apiKey: process.env.alchemyKey ? process.env.alchemyKey : '', // Replace with your Alchemy API Key
-    network: network, // Replace with your network
+    network: alchemyNetwork, // Replace with your network
   };
   //0xf107541c10a3e2655cad7a94aed4f7545ba99a1b484b26dc62dd1a46e608133c
 
