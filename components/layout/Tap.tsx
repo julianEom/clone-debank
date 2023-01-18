@@ -1,26 +1,46 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
+const routes = [
+  {
+    name: 'History',
+    path: '/history',
+  },
+  {
+    name: 'History Log',
+    path: '/history-log',
+  },
+  {
+    name: 'Safe',
+    path: '/gnosis-safe',
+  },
+];
+
 const Tap = () => {
   return (
     <StyledTap>
       <StyledNav>
-        <Link href='/history'>History</Link>
+        {routes.map((route, i) => {
+          return (
+            <Link key={i} href={route.path}>
+              {route.name}
+            </Link>
+          );
+        })}
       </StyledNav>
     </StyledTap>
   );
 };
 const StyledTap = styled.div`
-  width: 100%;
   height: 30px;
+  width: 948px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background-color: #fafbfc;
   /* background-color: blue; */
 `;
 const StyledNav = styled.div`
-  width: 948px;
   align-items: flex-start;
   a {
     margin: 10px;
