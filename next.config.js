@@ -12,6 +12,17 @@ const nextConfig = {
     // see https://styled-components.com/docs/tooling#babel-plugin for more info on the options.
     styledComponents: true,
   },
+  modularizeImports: {
+    // '@ethersproject': {
+    //   transform: `@ethersproject/{{member}}`,
+    // },
+    '@safe-global': {
+      transform: `@esafe-global/{{member}}`,
+    },
+    // '@web3-react': {
+    //   transform: `@web3-react/{{member}}`,
+    // },
+  },
   images: {
     remotePatterns: [
       {
