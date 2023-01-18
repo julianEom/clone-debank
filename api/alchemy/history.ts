@@ -9,8 +9,6 @@ const ALCHEMYKEY = process.env.alchemyKey ? process.env.alchemyKey : '';
   
   export const getTransactionReceipt = async (blockHash: string) => {
     const result = await alchemy.core.getTransactionReceipt(blockHash).then((res) => {return res});
-    console.log('getTransactionReceipt',result);
-        
     return result;
   }
   export const getTokenMetadata = async (usdcContract: string) => {
