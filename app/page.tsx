@@ -1,24 +1,17 @@
 'use client';
+import { useEvmNativeBalance } from '@moralisweb3/next';
 import { Network, Alchemy } from 'alchemy-sdk';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
 const Index = () => {
-  const ALCHEMYKEY = process.env.alchemyKey ? process.env.alchemyKey : '';
-  const settings = {
-    apiKey: ALCHEMYKEY, // Replace with your Alchemy API Key.
-    network: Network.ETH_MAINNET, // Replace with your network.
-  };
-
+  const address = '0x7e0de483a33bd04d2efe38686be5cb25cfd3e533'; //Dan 지갑
+  const { data: nativeBalance, error } = useEvmNativeBalance({ address });
   useEffect(() => {
-    const alchemy = new Alchemy(settings);
-    alchemy.core
-      .getTransactionReceipts({
-        blockHash:
-          '0xf66ca6b68fbe079412a5fbde2aeaa461587c0bd974de31d68a80da5260f23346',
-      })
-      .then(console.log);
-  }, []);
+    nativeBalance && console.log('moralis', nativeBalance);
+    error && console.log('error', error);
+  }, [nativeBalance, error]);
+
   return (
     <div>
       <h1>Index</h1>
