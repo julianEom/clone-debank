@@ -1,5 +1,11 @@
-type ContractMetadata = { name: string; address: string; logo: string };
+type ContractMetadata = { name: string; address: string; logo: string, symbol?: string };
 export const contracts: ContractMetadata[] = [
+  {
+    logo: 'null',
+    name: "Bend interest bearing WETH",
+    address: '0xed1840223484483c0cb050e6fc344d1ebf0778a9',
+    symbol: "bendWETH"
+  },
   {
     name: 'Arbitrum Bridge',
     address : '0x4dbd4fc535ac27206064b68ffcf827b0a60bab3f',

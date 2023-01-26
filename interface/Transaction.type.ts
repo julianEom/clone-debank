@@ -90,6 +90,22 @@ export type TransactionNFT = Transaction & {
   "tokenSymbol":string;
   "transactionIndex":string;
 }
+export type TansactionJay = Transaction & {
+  transactionHash: string;
+  blockHash: string;
+  blockNumber: string;
+  logs : any[];
+  token_transfer_logs: TokenTransferLog[];
+}
+export type TokenTransferLog = {
+  name:string;
+  data : {
+    name : string,
+    type: string,
+    value : string,
+    decode: boolean
+  }[]
+}
 export type Receipt = {
   "transactionHash": string;
   "from": string;

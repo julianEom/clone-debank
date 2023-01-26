@@ -54,7 +54,7 @@ const TransferRow = ({ transfer, plus }: { transfer: Log; plus: Boolean }) => {
   return (
     <div className='row'>
       {metadata && amount && (
-        <Image
+        <img
           src={
             metadata.logo
               ? metadata.logo
@@ -66,7 +66,7 @@ const TransferRow = ({ transfer, plus }: { transfer: Log; plus: Boolean }) => {
         />
       )}
       {metadata && tokenId && (
-        <Image
+        <img
           src={'https://assets.debank.com/static/media/default.b2295297.svg'}
           alt={`nft`}
           width={28}
@@ -94,7 +94,7 @@ const EtherRow = ({ value, plus }: { value: string; plus: Boolean }) => {
   return (
     <div className='row'>
       {
-        <Image
+        <img
           src={
             'https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png'
           }
@@ -190,7 +190,7 @@ const HistoryRow = ({ transaction, address }: Props) => {
         </Link>
       </div>
       <div className='row'>
-        <Image
+        <img
           src={
             transactionMetadata?.logo ||
             'https://static.debank.com/image/project/logo_url/compound3/28e2b958e38eb0c49d600633b9ce0969.png'

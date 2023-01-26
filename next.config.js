@@ -8,6 +8,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   experimental: { appDir: true },
+  externals: ['child_process', 'dns', 'fs', 'net', 'tls'],
   compiler: {
     // see https://styled-components.com/docs/tooling#babel-plugin for more info on the options.
     styledComponents: true,
@@ -19,9 +20,25 @@ const nextConfig = {
     '@safe-global': {
       transform: `@esafe-global/{{member}}`,
     },
+    '@ethersproject': {
+      transform: `@ethersproject/{{member}}`,
+    },
     // '@web3-react': {
     //   transform: `@web3-react/{{member}}`,
     // },
+  },
+  webpack5: true,
+  webpack: (config) => {
+    config.resolve.fallback = {
+      fs: false,
+      path: false,
+      os: false,
+      dns: false,
+      net: false,
+      tls: false,
+    };
+
+    return config;
   },
   images: {
     remotePatterns: [
