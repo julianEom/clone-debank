@@ -2,8 +2,7 @@ import axios, { AxiosAdapter } from 'axios';
 
 export const getTransactions = async () => {
   const result = await axios.get('http://localhost:3000/api/whooing/whooing');
-  console.log('result', result);
-  return result;
+  return result.data.data;
 };
 
 // TODO : type update
@@ -12,6 +11,5 @@ export const updateTransaction = async (data: any) => {
     'http://localhost:3000/api/whooing/whooing',
     data
   );
-  console.log('result', result);
-  return result;
+  return result.data;
 };
