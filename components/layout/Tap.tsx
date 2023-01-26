@@ -14,6 +14,10 @@ const routes = [
     name: 'Safe',
     path: '/gnosis-safe',
   },
+  {
+    name: 'Whooing',
+    path: '/whooing',
+  },
 ];
 
 const Tap = () => {
