@@ -1,25 +1,20 @@
 'use client';
 import styled from 'styled-components';
-import { getTraces, updateTrace } from '../../api/whooing/whooing';
+import WhooingTransactionForm from '../../components/whooing/WhooingTransactionForm';
 
 const Page = () => {
   return (
     <StyledSection>
-      <h1>Whooing</h1>
+      <h1>Whooing 거래입력</h1>
 
-      <button onClick={getTraces}>GET2</button>
-      <button onClick={() => updateTrace({ type: 'test' })}>POST</button>
+      <WhooingTransactionForm />
     </StyledSection>
   );
 };
 export default Page;
 
 const StyledSection = styled.section`
-  .table {
-    min-height: 960px;
-    width: 900px;
-    background-color: white;
-    margin-top: 15px;
-    padding: 0 24px;
+  h1 {
+    font-size: 22px;
   }
 `;
