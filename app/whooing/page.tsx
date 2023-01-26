@@ -7,7 +7,7 @@ const Page = () => {
     <StyledSection>
       <h1>Whooing</h1>
 
-      <button onClick={getTraces}>GET</button>
+      <button onClick={getTraces}>GET2</button>
       <button onClick={() => updateTrace({ type: 'test' })}>POST</button>
     </StyledSection>
   );
