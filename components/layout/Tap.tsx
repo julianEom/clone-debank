@@ -18,6 +18,10 @@ const routes = [
     name: 'Decode Tx',
     path: '/decode',
   },
+  {
+    name: 'WhooingJL',
+    path: '/whooing-jl',
+  },
 ];
 
 const Tap = () => {
