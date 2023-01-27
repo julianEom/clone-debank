@@ -1,36 +1,32 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { Transaction } from '../../interface/WhooingTransaction.type';
-import { getTransactions, updateTransaction } from '../../api/whooing/whooing';
+import {
+  updateTransactionMDB,
+  updateTransaction,
+} from '../../api/whooing/whooing';
 
-type Props = {};
-const WhooingTransactionForm = (props: Props) => {
-  // const [date, setDate] = useState<Date>();
-  // const [item, setItem] = useState<string>('');
-  // const [memo, setMemo] = useState<string>('');
-  // const [price, setPrice] = useState<number>(0);
-  // const [debtor, setDebtor] = useState<Item>({
-  //   item: '',
-  //   category: ''
-  // });
-  // const [creditor, setCreditor] = useState<Item>({
-  //   item: '',
-  //   category: ''
-  // });
-
-  // const { log, address } = props;
+const WhooingTransactionForm = () => {
   const [transaction, setTransaction] = useState<Transaction>({
     date: new Date(),
+    transactionHash: '',
     item: '',
     memo: null,
     price: 0,
-    debtorItem: '현금',
+    debtorType: '현금',
     debtorCategory: '자산',
-    creditorItem: '현금',
+    creditorType: '현금',
     creditorCategory: '자산',
   });
+
+  useEffect(() => {
+    console.log(
+      '🚀 ~ file: WhooingTransactionForm.tsx:21 ~ WhooingTransactionForm ~ transaction',
+      transaction
+    );
+  }, [transaction]);
 
   const changeTransaction = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,19 +41,24 @@ const WhooingTransactionForm = (props: Props) => {
       alert('데이터를 입력해주세요.');
       return;
     }
-    updateTransaction(data);
+    const params = {
+      ...data,
+      date: new Date(data.date),
+      price: Number(data.price),
+    };
+    updateTransactionMDB(params);
+    updateTransaction(params);
   };
 
   return (
     <StyledRow>
-      {/* <button onClick={getTransactions}>GET2</button> */}
       <Content>
         <div>
           <p>날짜</p>
           <input
             type='date'
             name='date'
-            value={transaction.date}
+            value={transaction?.date?.toString()}
             onChange={changeTransaction}
           />
         </div>
@@ -68,6 +69,13 @@ const WhooingTransactionForm = (props: Props) => {
             type='text'
             name='item'
             value={transaction.item}
+            onChange={changeTransaction}
+          />
+          <p>메모</p>
+          <input
+            type='text'
+            name='memo'
+            value={transaction.memo || ''}
             onChange={changeTransaction}
           />
         </div>
@@ -83,21 +91,35 @@ const WhooingTransactionForm = (props: Props) => {
         </div>
 
         <div>
-          <p>왼쪽</p>
+          <p>차변</p>
           <input
             type='text'
-            name='debtorItem'
-            value={transaction.debtorItem}
+            name='debtorType'
+            value={transaction.debtorType}
+            onChange={changeTransaction}
+          />
+          <p>분류</p>
+          <input
+            type='text'
+            name='debtorCategory'
+            value={transaction.debtorCategory}
             onChange={changeTransaction}
           />
         </div>
 
         <div>
-          <p>오른쪽</p>
+          <p>대변</p>
           <input
             type='text'
-            name='creditorItem'
-            value={transaction.creditorItem}
+            name='creditorType'
+            value={transaction.creditorType}
+            onChange={changeTransaction}
+          />
+          <p>분류</p>
+          <input
+            type='text'
+            name='creditorCategory'
+            value={transaction.creditorCategory}
             onChange={changeTransaction}
           />
         </div>
@@ -111,7 +133,15 @@ const WhooingTransactionForm = (props: Props) => {
 export default WhooingTransactionForm;
 
 const StyledRow = styled.section`
-  /* border-bottom: 1px solid #e8e8e8; */
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.05);
+  button {
+    width: 100%;
+  }
 `;
 
 const Content = styled.div`
@@ -119,4 +149,14 @@ const Content = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-bottom: 20px;
+  div {
+    display: flex;
+    flex-direction: column;
+    margin: 0 3px;
+  }
+  p {
+    font-size: 12px;
+    color: #999;
+    margin: 4px;
+  }
 `;

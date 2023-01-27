@@ -1,10 +1,12 @@
 export type Transaction = {
+  _id?: string;
   date: Date;
+  transactionHash: string;
   item: string;
-  memo?: string | null;
+  memo: string | null;
   price: number;
-  debtorItem: string;
+  debtorType: string;
   debtorCategory: string;
-  creditorItem: string;
+  creditorType: string;
   creditorCategory: string;
 };

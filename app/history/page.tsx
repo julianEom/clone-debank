@@ -79,6 +79,7 @@ const Page = () => {
       }
     );
   }, []);
+
   useEffect(() => {
     // setStreamingTransaction([mockData as ITransaction]);
     streamingTransaction &&
