@@ -1,5 +1,6 @@
 export type Transaction = {
   _id?: string;
+  id?: string;
   date: Date | null;
   transactionHash: string;
   item: string;

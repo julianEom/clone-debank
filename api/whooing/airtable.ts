@@ -54,3 +54,14 @@ export const updateTransactionAirtable = async (
   );
   return result;
 };
+
+export const deleteTransactionAirtable = async (
+  tableId: string,
+  recordId: string
+) => {
+  const result = await axios.delete(
+    `https://api.airtable.com/v0/${BASE_ID}/${tableId}/${recordId}`,
+    header()
+  );
+  return result;
+};
