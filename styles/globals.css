@@ -95,6 +95,15 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.MuiModal-root > section {
+  position: absolute;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  min-width: 845px;
+  max-width: 845px;
+}
+
 a {
   color: inherit;
   text-decoration: none;

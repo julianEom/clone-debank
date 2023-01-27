@@ -10,9 +10,13 @@
   },
   "dependencies": {
     "@alch/alchemy-sdk": "^1.2.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
     "@ethersproject/keccak256": "^5.7.0",
     "@ethersproject/strings": "^5.7.0",
     "@moralisweb3/next": "^2.11.0",
+    "@mui/material": "^5.11.6",
+    "@mui/styled-engine-sc": "^5.11.0",
     "@next/font": "13.1.1",
     "@safe-global/safe-core-sdk": "^3.2.2",
     "@safe-global/safe-ethers-lib": "^1.8.0",

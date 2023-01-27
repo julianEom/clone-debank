@@ -5,9 +5,10 @@ import { Transaction } from '../../interface/WhooingTransaction.type';
 
 type Props = {
   data: Transaction;
+  onClickModify: (data: Transaction) => void;
 };
 
-const WhooingTransactionRow = ({ data }: Props) => {
+const WhooingTransactionRow = ({ data, onClickModify }: Props) => {
   return (
     <TransactionRow>
       <div>
@@ -30,6 +31,11 @@ const WhooingTransactionRow = ({ data }: Props) => {
           {data.creditAccountValue} ({data.creditAccount})
         </p>
       </div>
+      <div>
+        <button onClick={() => onClickModify(data)}>
+          <p>수정</p>
+        </button>
+      </div>
     </TransactionRow>
   );
 };
@@ -43,24 +49,22 @@ const TransactionRow = styled.li`
   width: calc(100%-40px);
   padding: 10px;
   border-bottom: 1px solid #e5e5e5;
-  div:nth-child(1) {
-    width: 25%;
-    text-align: left;
-  }
+  div:nth-child(1),
   div:nth-child(2) {
-    width: 25%;
+    width: 24%;
     text-align: left;
   }
   div:nth-child(3) {
-    width: 14%;
+    width: 12%;
     text-align: right;
   }
-  div:nth-child(4) {
-    width: 18%;
-    text-align: right;
-  }
+  div:nth-child(4),
   div:nth-child(5) {
-    width: 18%;
+    width: 17%;
+    text-align: right;
+  }
+  div:nth-child(6) {
+    width: 6%;
     text-align: right;
   }
   p {

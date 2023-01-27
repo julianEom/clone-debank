@@ -6,7 +6,7 @@ export const getTransactionsMongo = async (tableId: string) => {
   return result.data.data;
 };
 
-export const updateTransactionMongo = async (data: Transaction) => {
+export const addTransactionMongo = async (data: Transaction) => {
   const result = await axios.post(
     'http://localhost:3000/api/whooing/mongo',
     data

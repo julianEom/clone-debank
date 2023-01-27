@@ -20,7 +20,7 @@ export const getTransactionsAirtable = async (tableId: string) => {
   return result.data.records;
 };
 
-export const updateTransactionAirtable = async (
+export const addTransactionAirtable = async (
   data: Transaction,
   tableId: string
 ) => {
@@ -33,6 +33,22 @@ export const updateTransactionAirtable = async (
   };
   const result = await axios.post(
     `https://api.airtable.com/v0/${BASE_ID}/${tableId}`,
+    body,
+    header()
+  );
+  return result;
+};
+
+export const updateTransactionAirtable = async (
+  data: Transaction,
+  tableId: string,
+  recordId: string
+) => {
+  const body = {
+    fields: data,
+  };
+  const result = await axios.patch(
+    `https://api.airtable.com/v0/${BASE_ID}/${tableId}/${recordId}`,
     body,
     header()
   );

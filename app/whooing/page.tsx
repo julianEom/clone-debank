@@ -1,8 +1,15 @@
 'use client';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getTransactionsAirtable } from '../../api/whooing/airtable';
-import { getTransactionsMongo } from '../../api/whooing/mongo';
+import {
+  getTransactionsAirtable,
+  addTransactionAirtable,
+} from '../../api/whooing/airtable';
+import {
+  getTransactionsMongo,
+  addTransactionMongo,
+} from '../../api/whooing/mongo';
+import { DEFAULT_TRANSACTION } from '../../components/whooing/config';
 import { Records, Transaction } from '../../interface/WhooingTransaction.type';
 import WhooingTransactionForm from '../../components/whooing/WhooingTransactionForm';
 import WhooingTransactions from '../../components/whooing/WhooingTransactions';
@@ -18,18 +25,40 @@ const Page = () => {
     }
   );
 
-  const { data: mongoData, isLoading: mongoLoading } = useQuery(
-    'mongoData' + tableId,
-    () => getTransactionsMongo(tableId),
-    {
-      suspense: true,
+  // const {
+  //   data: mongoData,
+  //   isLoading: mongoLoading,
+  //   isError,
+  // } = useQuery('mongoData' + tableId, () => getTransactionsMongo(tableId), {
+  //   suspense: true,
+  // });
+
+  const submitForm = (data: Transaction) => {
+    if (data.item.length === 0 || !data.date) {
+      alert('아이템 이름과 날짜를 입력해주세요.');
+      return;
     }
-  );
+    const params = {
+      ...data,
+      date: new Date(data.date),
+      price: Number(data.price),
+    };
+    try {
+      addTransactionMongo(params);
+      addTransactionAirtable(params, tableId);
+      alert('입력 완료!');
+    } catch (err) {
+      alert('에러! ');
+    }
+  };
 
   return (
     <StyledSection>
       <h1>Whooing 거래 입력</h1>
-      <WhooingTransactionForm tableId={tableId} />
+      <WhooingTransactionForm
+        defaultTx={DEFAULT_TRANSACTION}
+        onClickSubmit={submitForm}
+      />
 
       <h1>Whooing 거래 내역 - Airtable</h1>
       {airtableLoading ? (
@@ -41,22 +70,22 @@ const Page = () => {
               ...row,
               ...row.fields,
             }))
-            .sort((a, b) => {
+            .sort((a: any, b: any) => {
               return Number(new Date(b.date)) - Number(new Date(a.date));
             })}
         />
       )}
 
-      <h1>Whooing 거래 내역 - Mongo</h1>
-      {mongoLoading ? (
+      {/* <h1>Whooing 거래 내역 - Mongo</h1>
+      {isError || mongoLoading ? (
         <LoadingWrapper>Loading...</LoadingWrapper>
       ) : (
         <WhooingTransactions
-          transactions={mongoData.sort((a, b) => {
+          transactions={mongoData.sort((a: any, b: any) => {
             return Number(new Date(b.date)) - Number(new Date(a.date));
           })}
         />
-      )}
+      )} */}
     </StyledSection>
   );
 };
@@ -65,6 +94,7 @@ export default Page;
 const StyledSection = styled.section`
   h1 {
     font-size: 22px;
+    margin-top: 24px;
   }
 `;
 

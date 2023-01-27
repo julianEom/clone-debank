@@ -3,32 +3,14 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { Transaction } from '../../interface/WhooingTransaction.type';
-import { updateTransactionMongo } from '../../api/whooing/mongo';
-import { updateTransactionAirtable } from '../../api/whooing/airtable';
 import { DEBIT_ACCOUNTS, CREDIT_ACCOUNTS } from './config';
 
 type Props = {
-  tableId: string;
+  defaultTx: Transaction;
+  onClickSubmit: (data: Transaction) => void;
 };
-const WhooingTransactionForm = ({ tableId }: Props) => {
-  const [transaction, setTransaction] = useState<Transaction>({
-    date: null,
-    transactionHash: '',
-    item: '',
-    memo: null,
-    price: 0,
-    debitAccount: 'assets',
-    debitAccountValue: 'cash',
-    creditAccount: 'assets',
-    creditAccountValue: 'cash',
-  });
-
-  useEffect(() => {
-    console.log(
-      '🚀 ~ file: WhooingTransactionForm.tsx:21 ~ WhooingTransactionForm ~ transaction',
-      transaction
-    );
-  }, [transaction]);
+const WhooingTransactionForm = ({ defaultTx, onClickSubmit }: Props) => {
+  const [transaction, setTransaction] = useState<Transaction>(defaultTx);
 
   const changeTransaction = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,25 +18,6 @@ const WhooingTransactionForm = ({ tableId }: Props) => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const submitForm = (data: Transaction) => {
-    if (data.item.length === 0 || !data.date) {
-      alert('아이템 이름과 날짜를 입력해주세요.');
-      return;
-    }
-    const params = {
-      ...data,
-      date: new Date(data.date),
-      price: Number(data.price),
-    };
-    try {
-      updateTransactionMongo(params);
-      updateTransactionAirtable(params, tableId);
-      alert('입력 완료');
-    } catch (err) {
-      alert('에러! ' + err);
-    }
   };
 
   return (
@@ -154,7 +117,7 @@ const WhooingTransactionForm = ({ tableId }: Props) => {
         </div>
       </Content>
 
-      <button onClick={() => submitForm(transaction)}>입력</button>
+      <button onClick={() => onClickSubmit(transaction)}>입력</button>
     </StyledRow>
   );
 };
@@ -166,7 +129,6 @@ const StyledRow = styled.section`
   padding: 20px;
   background-color: #fff;
   border-radius: 6px;
-  margin-bottom: 16px;
   box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.05);
   button {
     width: 100%;
