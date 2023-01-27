@@ -7,11 +7,11 @@ export default async function handler(req: any, res: any) {
   switch (req.method) {
     case 'POST':
       let bodyObject = req.body;
-      const data = await db.collection('whooing').insertOne(bodyObject);
+      const data = await db.collection('mongo').insertOne(bodyObject);
       res.json(data);
       break;
     case 'GET':
-      const allDatas = await db.collection('whooing').find({}).toArray();
+      const allDatas = await db.collection('mongo').find({}).toArray();
       res.json({ status: 200, data: allDatas });
       break;
   }

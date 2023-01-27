@@ -1,72 +1,39 @@
+'use client';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Transaction } from '../../interface/WhooingTransaction.type';
-import { getTransactions, updateTransaction } from '../../api/whooing/whooing';
+import { Records, Transaction } from '../../interface/WhooingTransaction.type';
+import WhooingTransactionRow from './WhooingTransactionRow';
 
-const WhooingTransactions = () => {
-  const [data, setData] = useState<Transaction[]>([]);
-  const getData = async () => {
-    const _data = await getTransactions();
-    console.log(
-      '🚀 ~ file: WhooingTransactions.tsx:10 ~ getData ~ _data',
-      _data
-    );
-    setData(_data);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
+type Props = {
+  transactions: Transaction[];
+};
 
+const WhooingTransactions = ({ transactions }: Props) => {
   return (
     <StyledRow>
       <ul>
-        <TxContent>
+        <TransactionRow>
           <div>
-            <p>날짜</p>
+            <p>Date</p>
           </div>
           <div>
-            <p>아이템</p>
+            <p>Item</p>
           </div>
           <div>
-            <p>가격</p>
+            <p>Value</p>
           </div>
           <div>
-            <p>차변</p>
+            <p>Debit</p>
           </div>
           <div>
-            <p>대변</p>
+            <p>Credit</p>
           </div>
-        </TxContent>
+        </TransactionRow>
 
-        {data.length > 0 &&
-          data
-            .sort((a, b) => {
-              return Number(b._id) - Number(a._id);
-            })
-            .map((tx, i) => (
-              <TxContent key={i}>
-                <div>
-                  <p>{tx?.fields?.date?.toString()}</p>
-                </div>
-                <div>
-                  <p className='bold'>{tx?.fields.item}</p>
-                  {tx?.fields.memo && <p className='memo'>{tx?.fields.memo}</p>}
-                </div>
-                <div>
-                  <p className='bold'>{tx?.fields.price}</p>
-                </div>
-                <div>
-                  <p>
-                    {tx?.fields.debtorType} ({tx?.fields.debtorCategory})
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    {tx?.fields.creditorType} ({tx?.fields.creditorCategory})
-                  </p>
-                </div>
-              </TxContent>
-            ))}
+        {transactions.length > 0 &&
+          transactions.map((tx, i) => (
+            <WhooingTransactionRow data={tx} key={i} />
+          ))}
       </ul>
     </StyledRow>
   );
@@ -86,7 +53,7 @@ const StyledRow = styled.section`
   }
 `;
 
-const TxContent = styled.li`
+const TransactionRow = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -98,30 +65,26 @@ const TxContent = styled.li`
     text-align: left;
   }
   div:nth-child(2) {
-    width: 30%;
+    width: 25%;
     text-align: left;
   }
   div:nth-child(3) {
-    width: 15%;
+    width: 14%;
     text-align: right;
   }
   div:nth-child(4) {
-    width: 15%;
+    width: 18%;
     text-align: right;
   }
   div:nth-child(5) {
-    width: 15%;
+    width: 18%;
     text-align: right;
   }
   p {
-    font-size: 13px;
-    margin: 0;
-  }
-  p.memo {
-    font-size: 12px;
-    color: #999;
-  }
-  p.bold {
+    font-size: 14px;
+    color: #939393;
     font-weight: 600;
+
+    margin: 0;
   }
 `;

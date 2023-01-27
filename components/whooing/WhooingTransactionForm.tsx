@@ -1,24 +1,26 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { Transaction } from '../../interface/WhooingTransaction.type';
-import {
-  updateTransactionMDB,
-  updateTransaction,
-} from '../../api/whooing/whooing';
+import { updateTransactionMongo } from '../../api/whooing/mongo';
+import { updateTransactionAirtable } from '../../api/whooing/airtable';
+import { DEBIT_ACCOUNTS, CREDIT_ACCOUNTS } from './config';
 
-const WhooingTransactionForm = () => {
+type Props = {
+  tableId: string;
+};
+const WhooingTransactionForm = ({ tableId }: Props) => {
   const [transaction, setTransaction] = useState<Transaction>({
-    date: new Date(),
+    date: null,
     transactionHash: '',
     item: '',
     memo: null,
     price: 0,
-    debtorType: '현금',
-    debtorCategory: '자산',
-    creditorType: '현금',
-    creditorCategory: '자산',
+    debitAccount: 'assets',
+    debitAccountValue: 'cash',
+    creditAccount: 'assets',
+    creditAccountValue: 'cash',
   });
 
   useEffect(() => {
@@ -37,8 +39,8 @@ const WhooingTransactionForm = () => {
   };
 
   const submitForm = (data: Transaction) => {
-    if (data.item.length === 0) {
-      alert('데이터를 입력해주세요.');
+    if (data.item.length === 0 || !data.date) {
+      alert('아이템 이름과 날짜를 입력해주세요.');
       return;
     }
     const params = {
@@ -46,32 +48,44 @@ const WhooingTransactionForm = () => {
       date: new Date(data.date),
       price: Number(data.price),
     };
-    updateTransactionMDB(params);
-    updateTransaction(params);
+    try {
+      updateTransactionMongo(params);
+      updateTransactionAirtable(params, tableId);
+      alert('입력 완료');
+    } catch (err) {
+      alert('에러! ' + err);
+    }
   };
 
   return (
     <StyledRow>
       <Content>
         <div>
-          <p>날짜</p>
+          <p>Date</p>
           <input
             type='date'
             name='date'
-            value={transaction?.date?.toString()}
+            value={dayjs(transaction.date).format('YYYY-MM-DD')}
+            onChange={changeTransaction}
+          />
+          <p>Transaction</p>
+          <input
+            type='text'
+            name='transactionHash'
+            value={transaction.transactionHash}
             onChange={changeTransaction}
           />
         </div>
 
         <div>
-          <p>아이템</p>
+          <p>Item</p>
           <input
             type='text'
             name='item'
             value={transaction.item}
             onChange={changeTransaction}
           />
-          <p>메모</p>
+          <p>Memo</p>
           <input
             type='text'
             name='memo'
@@ -81,7 +95,7 @@ const WhooingTransactionForm = () => {
         </div>
 
         <div>
-          <p>금액</p>
+          <p>Value</p>
           <input
             type='number'
             name='price'
@@ -91,35 +105,50 @@ const WhooingTransactionForm = () => {
         </div>
 
         <div>
-          <p>차변</p>
-          <input
-            type='text'
-            name='debtorType'
-            value={transaction.debtorType}
+          <p>Debit</p>
+
+          <p className='desc'>대분류</p>
+          <select
+            name='debitAccount'
+            id='debitAccount'
+            value={transaction.debitAccount}
             onChange={changeTransaction}
-          />
-          <p>분류</p>
+          >
+            {DEBIT_ACCOUNTS.map((account) => (
+              <option value={account} key={account}>
+                {account}
+              </option>
+            ))}
+          </select>
+          <p className='desc'>소분류</p>
           <input
             type='text'
-            name='debtorCategory'
-            value={transaction.debtorCategory}
+            name='debitAccountValue'
+            value={transaction.debitAccountValue}
             onChange={changeTransaction}
           />
         </div>
 
         <div>
-          <p>대변</p>
-          <input
-            type='text'
-            name='creditorType'
-            value={transaction.creditorType}
+          <p>Credit</p>
+          <p className='desc'>대분류</p>
+          <select
+            name='creditAccount'
+            id='creditAccount'
+            value={transaction.creditAccount}
             onChange={changeTransaction}
-          />
-          <p>분류</p>
+          >
+            {CREDIT_ACCOUNTS.map((account) => (
+              <option value={account} key={account}>
+                {account}
+              </option>
+            ))}
+          </select>
+          <p className='desc'>소분류</p>
           <input
             type='text'
-            name='creditorCategory'
-            value={transaction.creditorCategory}
+            name='creditAccountValue'
+            value={transaction.creditAccountValue}
             onChange={changeTransaction}
           />
         </div>
@@ -155,8 +184,13 @@ const Content = styled.div`
     margin: 0 3px;
   }
   p {
+    font-size: 13px;
+    color: #939393;
+    margin: 4px;
+  }
+  p.desc {
     font-size: 12px;
     color: #999;
-    margin: 4px;
+    margin: 2px;
   }
 `;
